@@ -65,7 +65,7 @@
         :args (s/cat
                 :bindings :clojure.core.specs.alpha/bindings
                 :return any?
-                :else any?))
+                :else (s/? any?)))
 
 (s/fdef f/ok->
         :args (s/cat
