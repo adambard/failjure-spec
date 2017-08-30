@@ -5,7 +5,7 @@
                   [org.clojure/spec.alpha "0.1.123" :scope "provided"]
                   [org.clojure/test.check "0.10.0-alpha2" :scope "test"]
 
-                  [failjure "1.0.1"]
+                  [failjure "1.1.0"]
 
                   [adzerk/bootlaces "0.1.13" :scope "test"]
                   [adzerk/boot-test "1.1.1" :scope "test"]])
@@ -13,7 +13,7 @@
 (require '[adzerk.bootlaces :refer :all]
          '[adzerk.boot-test :refer :all])
 
-(def +version+ "0.1.0-SNAPSHOT")
+(def +version+ "1.1.0")
 (bootlaces! +version+)
 
 

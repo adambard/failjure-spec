@@ -77,6 +77,19 @@
                 :start any?
                 :forms (s/* any?)))
 
+(s/def ::pred
+  (s/fspec
+    :args (s/cat :val any?)
+    :ret boolean?))
+
+(s/fdef f/assert-with
+        :args (s/cat
+                :pred ::pred
+                :value any?
+                :message string?)
+        :ret (s/or ::failure any?))
+
+
 
 
 (comment
@@ -85,9 +98,17 @@
 
   (stest/instrument `f/if-let-ok?)
   (stest/instrument `f/when-failed)
+  (stest/instrument)
 
   (refer 'failjure.core)
-  (stest/check `f/failed?)
+  (stest/check `f/assert-with)
+  (f/assert-with test-fn 1 "Ok")
+  (defn test-fn [x]
+    true)
+  (s/fdef test-fn
+          :args (s/cat
+                  :x integer?)
+          :ret integer?)
 
   (f/attempt-all [x (f/fail "Hey")]
                  "OK"
