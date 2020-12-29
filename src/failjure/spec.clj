@@ -9,6 +9,8 @@
                    f/failed?
                    #(gen/fmap f/->Failure (s/gen string?))))
 
+(s/def ::value (s/or :failure ::failure :ok any?))
+
 
 (s/fdef f/fail
         :args (s/or
@@ -18,19 +20,21 @@
         :ret ::failure)
 
 (s/fdef f/message
-        :args (s/cat :it (s/or :failure ::failure
-                               :ok any?))
+        :args (s/cat :it ::failure)
         :ret string?)
 
 
 (s/fdef f/failed?
-        :args (s/or
-                :failed (s/cat :it ::failure)
-                :ok (s/cat :it any?))
+        :args (s/cat :it ::value)
         :ret boolean?)
 
+(s/fdef f/attempt
+        :args (s/cat
+                :fn (s/fspec :args (s/cat :it ::failure))
+                :value ::value))
 
-(s/def ::single-binding (s/tuple simple-symbol? any?))
+
+(s/def ::single-binding (s/tuple simple-symbol? ::value))
 
 (s/fdef f/if-let-ok?
         :args (s/cat
@@ -72,6 +76,12 @@
                 :start any?
                 :forms (s/* any?)))
 
+(s/fdef f/as-ok->
+        :args (s/cat
+                :start any?
+                :placeholder any?
+                :forms (s/* any?)))
+
 (s/fdef f/ok->>
         :args (s/cat
                 :start any?
@@ -101,7 +111,7 @@
   (stest/instrument)
 
   (refer 'failjure.core)
-  (stest/check `f/assert-with)
+  (stest/check)
   (f/assert-with test-fn 1 "Ok")
   (defn test-fn [x]
     true)
